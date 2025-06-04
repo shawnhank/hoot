@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router';
 import HomePage from '../HomePage/HomePage';
 import PostListPage from '../PostListPage/PostListPage';
 import NewPostPage from '../NewPostPage/NewPostPage';
+import SignUpPage from '../SignUpPage/SignUpPage';
 import NavBar from '../../components/NavBar/NavBar';
 import './App.css';
 
@@ -22,6 +23,7 @@ export default function App() {
         ) : (
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/signup" element={<SignUpPage />} />
           </Routes>
         )}
       </section>
