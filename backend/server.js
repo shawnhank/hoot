@@ -16,6 +16,11 @@ app.use(express.static(path.join(__dirname, '../frontend/dist')));
 // because forms are not submitted!
 app.use(express.json());
 
+// Middleware to check the request's headers for a JWT and
+// verify that it's a valid.  If so, it will assign the
+// user object in the JWT's payload to req.user
+app.use(require('./middleware/checkToken'));
+
 // API Routes
 app.use('/api/auth', require('./routes/auth'));
 

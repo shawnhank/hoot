@@ -8,6 +8,12 @@ export async function signUp(userData) {
   return getUser();
 }
 
+export async function logIn(credentials) {
+  const token = await sendRequest(`${BASE_URL}/login`, 'POST', credentials);
+  localStorage.setItem('token', token);
+  return getUser();
+}
+
 export function getUser() {
   const token = getToken();
   return token ? JSON.parse(atob(token.split('.')[1])).user : null;
