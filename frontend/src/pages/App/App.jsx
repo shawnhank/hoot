@@ -23,7 +23,7 @@ export default function App() {
         ) : (
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/signup" element={<SignUpPage setUser={setUser} />} />
           </Routes>
         )}
       </section>

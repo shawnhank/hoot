@@ -17,6 +17,7 @@ app.use(express.static(path.join(__dirname, '../frontend/dist')));
 app.use(express.json());
 
 // API Routes
+app.use('/api/auth', require('./routes/auth'));
 
 
 // Use a "catch-all" route to deliver the frontend's production index.html
