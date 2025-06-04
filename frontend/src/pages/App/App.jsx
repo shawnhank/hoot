@@ -13,7 +13,7 @@ export default function App() {
 
   return (
     <main className="App">
-      <NavBar user={user} />
+      <NavBar user={user} setUser={setUser} />
       <section id="main-section">
         {user ? (
           <Routes>

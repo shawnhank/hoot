@@ -25,3 +25,7 @@ export function getToken() {
   }
   return token;
 }
+
+export function logOut() {
+  localStorage.removeItem('token');
+}

@@ -1,7 +1,16 @@
-import { NavLink, Link } from 'react-router';
+import { NavLink, Link, useNavigate } from 'react-router';
+import { logOut } from '../../services/authService';
 import './NavBar.css';
 
-export default function NavBar({ user }) {
+export default function NavBar({ user, setUser }) {
+  const navigate = useNavigate();
+
+  function handleLogOut() {
+    logOut();
+    setUser(null);
+    navigate('/');
+  }
+
   return (
     <nav className="NavBar">
       <NavLink to="/">Home</NavLink>
@@ -14,7 +23,7 @@ export default function NavBar({ user }) {
           &nbsp; | &nbsp;
           <NavLink to="/posts/new">New Post</NavLink>
           &nbsp; | &nbsp;
-          {/* TODO: Add Log Out Link */}
+          <Link onClick={handleLogOut}>Log Out</Link>
           <span>Welcome, {user.name}</span>
         </>
       ) : (
