@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router';
 import HomePage from '../HomePage/HomePage';
 import PostListPage from '../PostListPage/PostListPage';
 import NewPostPage from '../NewPostPage/NewPostPage';
+import NavBar from '../../components/NavBar/NavBar';
 import './App.css';
 
 export default function App() {
@@ -10,6 +11,7 @@ export default function App() {
 
   return (
     <main className="App">
+      <NavBar user={user} />
       <section id="main-section">
         {user ? (
           <Routes>
