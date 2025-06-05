@@ -1,0 +1,33 @@
+const Hoot = require('../models/hoot');
+
+
+module.exports = {
+  index,
+  create,
+  // show,
+  // update,
+  // deleteHoot,
+};
+
+async function index(req, res) {
+  try {
+    const hoots = await Hoot.find({});
+    // Below would return all hoots for just the logged in user
+    // const hoots = await Hoot.find({author: req.user._id});
+    res.json(hoots);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: 'Failed to fetch hoots' });
+  }
+}
+
+async function create(req, res) {
+  try {
+    req.body.author = req.user._id;
+    const hoot = await Hoot.create(req.body);
+    res.json(hoot);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: 'Failed to create hoot' });
+  }
+}
