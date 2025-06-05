@@ -10,5 +10,7 @@ router.use(ensureLoggedIn);
 
 // GET /api/posts (INDEX action)
 router.get('/', postsCtrl.index);
+// POST /api/posts (CREATE action)
+router.post('/', postsCtrl.create);
 
 module.exports = router;

@@ -2,6 +2,7 @@ const Post = require('../models/post');
 
 module.exports = {
   index,
+  create
 };
 
 async function index(req, res) {
@@ -13,6 +14,17 @@ async function index(req, res) {
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: 'Failed to fetch posts' });
+  }
+}
+
+async function create(req, res) {
+  try {
+    req.body.author = req.user._id;
+    const post = await Post.create(req.body);
+    res.json(post);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: 'Failed to creat post' });
   }
 }
 
