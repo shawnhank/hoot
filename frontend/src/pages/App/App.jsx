@@ -21,12 +21,14 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/posts" element={<PostListPage />} />
             <Route path="/posts/new" element={<NewPostPage />} />
+            <Route path="*" element={null} />
           </Routes>
         ) : (
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/signup" element={<SignUpPage setUser={setUser} />} />
             <Route path="/login" element={<LogInPage setUser={setUser} />} />
+            <Route path="*" element={null} />
           </Routes>
         )}
       </section>
