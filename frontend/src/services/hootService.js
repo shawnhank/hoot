@@ -13,7 +13,7 @@ export async function create(hootData) {
 export async function show(hootId) {
   // The original code is passing the hootId as the second parameter (method)
   // instead of appending it to the URL
-  return sendRequest(`${BASE_URL}/${hootId}`);
+  return sendRequest(`${BASE_URL}/${hootId}`, 'GET');
 }
 
 export async function update(hootId) {
