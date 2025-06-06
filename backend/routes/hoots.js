@@ -20,5 +20,7 @@ router.get('/:hootId', hootsCtrl.show);
 // GET /api/hoots (UPDATE action)
 router.put('/:hootId', hootsCtrl.update);
 
+// GET /api/hoots (UPDATE action)
+router.delete('/:hootId', hootsCtrl.deleteHoot);
 
 module.exports = router;
