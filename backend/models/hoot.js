@@ -25,7 +25,7 @@ const hootSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: ['News', 'Sports', 'Games', 'Movies', 'Music', 'Television'],
+      enum: ['News', 'Sports', 'Games', 'Movies', 'Music', 'Television', 'Technology', 'Social Media'],
     },
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     comments: [commentSchema],

@@ -19,7 +19,7 @@ async function index(req, res) {
     console.log(err);
     res.status(500).json({ message: 'Failed to fetch hoots' });
   }
-}
+};
 
 async function create(req, res) {
   try {
@@ -30,7 +30,7 @@ async function create(req, res) {
     console.log(err);
     res.status(400).json({ message: 'Failed to create hoot' });
   }
-}
+};
 
 async function show(req, res) {
   try {
@@ -40,17 +40,30 @@ async function show(req, res) {
     console.log(err);
     res.status(400).json({ message: "Failed to fetch hoots" });
   }
-}
+};
 
 async function update(req, res) {
   try {
-     const updatedHoot = await Hoot.findByIdAndUpdate(req.params.hootId, req.body,{ new: true });
-     res.json(updatedHoot);
+    // Find the hoot:
+    const hoot = await Hoot.findById(req.params.hootId);
+
+    // Check permissions:
+    if (!hoot.author.equals(req.user._id)) {
+      return res.status(403).send("You're not allowed to do that!");
+    }
+
+    // Update hoot:
+    const updatedHoot = await Hoot.findByIdAndUpdate(req.params.hootId, req.body, { new: true });
+
+    // Append req.user to the author property:
+    updatedHoot._doc.author = req.user;
+
+    // Issue JSON response:
+    res.status(200).json(updatedHoot);
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ err: err.message });
+    res.status(500).json({ err: err.message });
   }
-}
+};
 
 async function deleteHoot(req, res) {
   try {
@@ -64,5 +77,16 @@ async function deleteHoot(req, res) {
     res.status(200).json(deletedHoot);
   } catch (err) {
     res.status(500).json({ err: err.message });
+  }
+};
+
+
+async function show(req, res) {
+  try {
+    const hoot = await Hoot.findById(req.params.hootId).populate("author");
+    res.json(hoot);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: "Failed to fetch hoots" });
   }
 };
