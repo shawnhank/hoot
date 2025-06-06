@@ -16,10 +16,23 @@ export async function show(hootId) {
   return sendRequest(`${BASE_URL}/${hootId}`, 'GET');
 }
 
-export async function update(hootId) {
-  return sendRequest(BASE_URL, 'PUT', hootId);
+export async function update(hootId, hootData) {
+  return sendRequest(`${BASE_URL}/${hootId}`, 'PUT', hootData);
 }
 
-export async function deletedHoot(hootId) {
-  return sendRequest(BASE_URL, 'DELETE', hootId);
+export async function deleteHoot(hootId) {
+  return sendRequest(`${BASE_URL}/${hootId}`, 'DELETE');
+}
+
+// Comment-related functions
+export async function createComment(hootId, commentData) {
+  return sendRequest(`${BASE_URL}/${hootId}/comments`, 'POST', commentData);
+}
+
+export async function updateComment(hootId, commentId, commentData) {
+  return sendRequest(`${BASE_URL}/${hootId}/comments/${commentId}`, 'PUT', commentData);
+}
+
+export async function deleteComment(hootId, commentId) {
+  return sendRequest(`${BASE_URL}/${hootId}/comments/${commentId}`, 'DELETE');
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { Routes, Route } from 'react-router';
+import { Routes, Route, useNavigate } from 'react-router';
 import { getUser } from '../../services/authService';
 import { useParams } from 'react-router';
 import HomePage from '../HomePage/HomePage';
@@ -16,7 +16,7 @@ import './App.css';
 export default function App() {
   const [user, setUser] = useState(getUser());
   const [hoots, setHoots] = useState([]);
- 
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchAllHoots = async () => {
       const hootsData = await hootService.index();
@@ -26,6 +26,19 @@ export default function App() {
     if (user) fetchAllHoots();
   }, [user]);
 
+ // Add this function to handle creating new hoots
+  async function handleAddHoot(hootFormData) {
+    console.log('hootFormData', hootFormData);
+    // Create the hoot in the database
+    const newHoot = await hootService.create(hootFormData);
+    // Update the hoots state with the new hoot
+    setHoots([...hoots, newHoot]);
+    // Navigate to the hoots list page
+    navigate('/hoots');
+  }
+
+
+
   return (
     <main className="App">
       <NavBar user={user} setUser={setUser} />
@@ -33,9 +46,9 @@ export default function App() {
         {user ? (
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/hoots" element={<HootListPage hoots={hoots}/>} />
-            <Route path="/hoots/new" element={<NewHootPage />} />
-            <Route path="/hoots/:hootId" element={<HootDetailPage />}  />
+            <Route path="/hoots" element={<HootListPage hoots={hoots} />} />
+            <Route path="/hoots/new" element={<NewHootPage handleAddHoot={handleAddHoot} />} />
+            <Route path="/hoots/:hootId" element={<HootDetailPage hoots={hoots} />}  />
             <Route path="*" element={null} />
           </Routes>
         ) : (

@@ -39,11 +39,37 @@ export default function HootDetailPage() {
   return (
     <div>
       <h1>{hoot.title}</h1>
+      <div>
+        <p>{hoot.category}</p>
+      </div>
+      <p>{hoot.text}</p>
       <p>
         Posted by {hoot.author.name} on {new Date(hoot.createdAt).toLocaleDateString()}
       </p>
-      <p>{hoot.text}</p>
-      <p>Category: {hoot.category}</p>
+     
+      <div>
+        <h2>Comments</h2>
+          {hoot.comments && hoot.comments.length > 0 ? (
+          <div className="comments-list">
+            {hoot.comments.map((comment) => (
+              <div key={comment._id} className="comment">
+                <p>{comment.text}</p>
+                <p className="comment-meta">
+                  {/* Handle both populated and unpopulated author fields */}
+                  {typeof comment.author === 'object' 
+                    ? `Posted by ${comment.author.name}` 
+                    : 'Posted by User'} 
+                  {comment.createdAt && ` on ${new Date(comment.createdAt).toLocaleDateString()}`}
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>No comments yet.</p>
+        )}
+      </div>
+      
+      
     </div>
   );
 }
