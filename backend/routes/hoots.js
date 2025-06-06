@@ -14,4 +14,11 @@ router.get('/', hootsCtrl.index);
 // POST /api/hoots (CREATE action)
 router.post('/', hootsCtrl.create);
 
+// GET /api/hoots (SHOW action)
+router.get('/:hootId', hootsCtrl.show);
+
+// GET /api/hoots (UPDATE action)
+router.put('/:hootId', hootsCtrl.update);
+
+
 module.exports = router;

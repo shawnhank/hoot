@@ -4,8 +4,8 @@ const Hoot = require('../models/hoot');
 module.exports = {
   index,
   create,
-  // show,
-  // update,
+  show,
+  update,
   // deleteHoot,
 };
 
@@ -29,5 +29,25 @@ async function create(req, res) {
   } catch (err) {
     console.log(err);
     res.status(400).json({ message: 'Failed to create hoot' });
+  }
+}
+
+async function show(req, res) {
+  try {
+    const hoot = await Hoot.findById(req.params.hootId).populate("author");
+    res.json(hoot);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: "Failed to fetch hoots" });
+  }
+}
+
+async function update(req, res) {
+  try {
+     const updatedHoot = await Hoot.findByIdAndUpdate(req.params.hootId, req.body,{ new: true });
+     res.json(updatedHoot);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ err: err.message });
   }
 }
