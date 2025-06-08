@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router';
 import * as hootService from '../../services/hootService';
 
 export default function NewHootPage({ handleAddHoot }) {
@@ -11,26 +11,58 @@ export default function NewHootPage({ handleAddHoot }) {
   });
   // Add this state to track any errors 
   const [errorMsg, setErrorMsg] = useState('');
+  // Add state to track if we're in edit mode
+  const [isEdit, setIsEdit] = useState(false);
+  
   // Add this navigate hook
   const navigate = useNavigate();
- // Add this function to handle form input changes
+  const { hootId } = useParams();
+
+  useEffect(() => {
+    async function fetchHootForEdit() {
+      if (hootId) {
+        setIsEdit(true);
+        try {
+          const hootData = await hootService.show(hootId);
+          setFormData({
+            title: hootData.title,
+            text: hootData.text,
+            category: hootData.category,
+          });
+        } catch (err) {
+          setErrorMsg('Failed to load hoot for editing');
+        }
+      }
+    }
+    
+    fetchHootForEdit();
+  }, [hootId]);
+  
+  // Add this function to handle form input changes
   function handleChange(evt) {
     setFormData({ ...formData, [evt.target.name]: evt.target.value });
   }
-  // 
+  // Add this function to handle form submission
   async function handleSubmit(evt) {
     evt.preventDefault();
     try {
-      await handleAddHoot(formData);
-      // No need for navigate here as handleAddHoot already does that
+      if (isEdit) {
+        // Update existing hoot
+        await hootService.update(hootId, formData);
+        navigate(`/hoots/${hootId}`);
+      } else {
+        // Create new hoot
+        await handleAddHoot(formData);
+        // No need for navigate here as handleAddHoot already does that
+      }
     } catch (err) {
-      setErrorMsg('Adding Hoot Failed');
+      setErrorMsg(isEdit ? 'Updating Hoot Failed' : 'Adding Hoot Failed');
     }
   }
 
   return (
     <>
-      <h2>Add Hoot</h2>
+      <h2>{isEdit ? 'Edit Hoot' : 'Add Hoot'}</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor='title-input'>Title</label>
         <input
@@ -67,7 +99,7 @@ export default function NewHootPage({ handleAddHoot }) {
           <option value='Technology'>Technology</option>
           <option value='Television'>Television</option>
         </select>
-        <button type="submit">ADD HOOT</button>
+        <button type="submit">{isEdit ? 'UPDATE HOOT' : 'ADD HOOT'}</button>
       </form>
       <p className="error-message">&nbsp;{errorMsg}</p>
     </>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import * as hootService from '../../services/hootService';
 import CommentForm from '../../components/CommentForm/CommentForm';
-
+import './HootDetailPage.css';
 
 export default function HootDetailPage() {
   console.log('HootDetailPage rendering');
@@ -59,37 +59,48 @@ export default function HootDetailPage() {
       <p>
         Posted by {hoot.author.name} on {new Date(hoot.createdAt).toLocaleDateString()}
       </p>
-     
-    <button 
-      onClick={handleDeleteHoot}
-      className="delete-btn"
-    >
-      DELETE HOOT
-    </button>
 
-      <section>
-        <h2>Comments</h2>
-        {/* Make use of the CommentForm component */}
-        <CommentForm hootId={hootId} setHoot={setHoot} />
-           
-        {!hoot.comments || !hoot.comments.length ? (
-          <p>There are no comments.</p>
-        ) : (
-          hoot.comments.map((comment) => (
-            <article key={comment._id} className="comment">
-              <header>
-                <p>
-                  {/* Handle both populated and unpopulated author fields */}
-                  {typeof comment.author === 'object' 
-                    ? `${comment.author.name} posted on ${new Date(comment.createdAt).toLocaleDateString()}`
-                    : `Posted by User on ${new Date(comment.createdAt).toLocaleDateString()}`}
-                </p>
-              </header>
-              <p>{comment.text}</p>
-            </article>
-          ))
-        )}
-      </section>
+    
+      <div className="hoot-actions">
+        {/* Add Edit button */}
+        <button 
+          onClick={() => navigate(`/hoots/${hootId}/edit`)}
+          className="edit-btn"
+        >
+          EDIT HOOT
+        </button>
+        
+        <button 
+          onClick={handleDeleteHoot}
+          className="delete-btn"
+        >
+          DELETE HOOT
+        </button>
+      </div>
+
+        <section>
+          <h2>Comments</h2>
+          {/* Make use of the CommentForm component */}
+          <CommentForm hootId={hootId} setHoot={setHoot} />
+            
+          {!hoot.comments || !hoot.comments.length ? (
+            <p>There are no comments.</p>
+          ) : (
+            hoot.comments.map((comment) => (
+              <article key={comment._id} className="comment">
+                <header>
+                  <p>
+                    {/* Handle both populated and unpopulated author fields */}
+                    {typeof comment.author === 'object' 
+                      ? `${comment.author.name} posted on ${new Date(comment.createdAt).toLocaleDateString()}`
+                      : `Posted by User on ${new Date(comment.createdAt).toLocaleDateString()}`}
+                  </p>
+                </header>
+                <p>{comment.text}</p>
+              </article>
+            ))
+          )}
+        </section>
     </div>
   );
 }

@@ -47,6 +47,7 @@ export default function App() {
             <Route path="/hoots" element={<HootListPage hoots={hoots} />} />
             <Route path="/hoots/new" element={<NewHootPage handleAddHoot={handleAddHoot} />} />
             <Route path="/hoots/:hootId" element={<HootDetailPage hoots={hoots} />}  />
+            <Route path="/hoots/:hootId/edit" element={<NewHootPage handleAddHoot={handleAddHoot} />} />
             <Route path="*" element={null} />
           </Routes>
         ) : (
