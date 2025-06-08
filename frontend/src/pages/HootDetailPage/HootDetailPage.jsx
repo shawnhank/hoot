@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import * as hootService from '../../services/hootService';
 import CommentForm from '../../components/CommentForm/CommentForm';
+
 
 export default function HootDetailPage() {
   console.log('HootDetailPage rendering');
   const [hoot, setHoot] = useState(null);
   const params = useParams();
   console.log('URL params:', params);
+  const navigate = useNavigate();
   const { hootId } = params;
   console.log('Extracted hootId:', hootId);
 
@@ -29,6 +31,16 @@ export default function HootDetailPage() {
     fetchHoot();
   }, [hootId]);
 
+  async function handleDeleteHoot() {
+    try {
+      await hootService.deleteHoot(hootId);
+      navigate('/hoots');
+    } catch (error) {
+      console.error('Error deleting hoot:', error);
+    }
+  }
+
+
   console.log('Current hoot state:', hoot);
   
   if (!hoot) {
@@ -48,6 +60,13 @@ export default function HootDetailPage() {
         Posted by {hoot.author.name} on {new Date(hoot.createdAt).toLocaleDateString()}
       </p>
      
+    <button 
+      onClick={handleDeleteHoot}
+      className="delete-btn"
+    >
+      DELETE HOOT
+    </button>
+
       <section>
         <h2>Comments</h2>
         {/* Make use of the CommentForm component */}
