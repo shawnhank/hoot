@@ -1,6 +1,5 @@
 const Hoot = require('../models/hoot');
 
-
 module.exports = {
   index,
   create,
@@ -33,15 +32,22 @@ async function create(req, res) {
   }
 };
 
+// Find the show function in the hoots controller
 async function show(req, res) {
   try {
-    const hoot = await Hoot.findById(req.params.hootId).populate("author").populate("comments.author");
+    // Update this line to populate both the hoot author and comment authors
+    const hoot = await Hoot.findById(req.params.hootId)
+      .populate('author')
+      .populate('comments.author');
+    
+    if (!hoot) return res.status(404).json({ message: 'Hoot not found' });
+    
     res.json(hoot);
   } catch (err) {
     console.log(err);
-    res.status(400).json({ message: "Failed to fetch hoots" });
+    res.status(400).json({ message: 'Failed to fetch hoot' });
   }
-};
+}
 
 async function update(req, res) {
   try {
@@ -82,12 +88,4 @@ async function deleteHoot(req, res) {
 };
 
 
-async function show(req, res) {
-  try {
-    const hoot = await Hoot.findById(req.params.hootId).populate("author");
-    res.json(hoot);
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({ message: "Failed to fetch hoots" });
-  }
-};
+
