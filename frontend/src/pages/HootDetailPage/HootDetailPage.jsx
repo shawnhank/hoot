@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import * as hootService from '../../services/hootService';
+import CommentForm from '../../components/CommentForm/CommentForm';
 
 export default function HootDetailPage() {
   console.log('HootDetailPage rendering');
@@ -47,29 +48,29 @@ export default function HootDetailPage() {
         Posted by {hoot.author.name} on {new Date(hoot.createdAt).toLocaleDateString()}
       </p>
      
-      <div>
+      <section>
         <h2>Comments</h2>
-          {hoot.comments && hoot.comments.length > 0 ? (
-          <div className="comments-list">
-            {hoot.comments.map((comment) => (
-              <div key={comment._id} className="comment">
-                <p>{comment.text}</p>
-                <p className="comment-meta">
+        {/* Make use of the CommentForm component */}
+        <CommentForm hootId={hootId} setHoot={setHoot} />
+           
+        {!hoot.comments || !hoot.comments.length ? (
+          <p>There are no comments.</p>
+        ) : (
+          hoot.comments.map((comment) => (
+            <article key={comment._id} className="comment">
+              <header>
+                <p>
                   {/* Handle both populated and unpopulated author fields */}
                   {typeof comment.author === 'object' 
-                    ? `Posted by ${comment.author.name}` 
-                    : 'Posted by User'} 
-                  {comment.createdAt && ` on ${new Date(comment.createdAt).toLocaleDateString()}`}
+                    ? `${comment.author.name} posted on ${new Date(comment.createdAt).toLocaleDateString()}`
+                    : `Posted by User on ${new Date(comment.createdAt).toLocaleDateString()}`}
                 </p>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p>No comments yet.</p>
+              </header>
+              <p>{comment.text}</p>
+            </article>
+          ))
         )}
-      </div>
-      
-      
+      </section>
     </div>
   );
 }
